@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phone Call App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            text-align: center;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 400px;
+            width: 90%;
+            box-sizing: border-box;
+            transition: transform 0.3s;
+        }
+
+        .container:hover {
+            transform: scale(1.02);
+        }
+
+        h1 {
+            color: #007bff;
+            margin-bottom: 30px;
+            font-weight: normal;
+        }
+
+        input[type="text"] {
+            padding: 12px;
+            width: calc(100% - 24px);
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+
+        button {
+            padding: 12px 24px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        button:active {
+            background-color: #004080;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Phone Call App</h1>
+        <input type="text" id="phoneNumber" placeholder="Enter phone number">
+        <br>
+        <button onclick="makeCall()">Call</button>
+    </div>
+
+    <script>
+        function makeCall() {
+            var phoneNumber = document.getElementById("phoneNumber").value;
+            if (!phoneNumber) {
+                alert("Please enter a phone number.");
+                return;
+            }
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/makeCall", true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        var response = JSON.parse(xhr.responseText);
+                        alert(response.message);
+                    } else {
+                        console.error('Failed to make call');
+                    }
+                }
+            };
+            var data = JSON.stringify({ phoneNumber: phoneNumber });
+            xhr.send(data);
+        }
+    </script>
+</body>
+</html>
